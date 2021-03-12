@@ -1,17 +1,25 @@
-import React, {useState} from 'react'
+import React, {Fragment,useState} from 'react'
+import {calcularTotal} from '../helpers.js'
 
 
-const Formulario = () => {
+const Formulario = ({cantidad, guardarCantidad, plazo, guardarPlazo}) => {
 
-    const [cantidad, guardarCantidad] = useState(0)
+    const [error, guardarError] = useState(false)
+    const calcularPrestamo = e => {
+        e.preventDefault()
+        if(cantidad === 0 || plazo === ''){
+           guardarError(true)
+           return
+        }
+        guardarError(false)
+        
+        calcularTotal(cantidad, plazo)
 
-    const leerCantidad= e =>{
-        guardarCantidad(parseInt(e.target.value))
     }
     
     return (
-        <form>
-            {cantidad}
+    <Fragment>
+        <form onSubmit = {calcularPrestamo} >
             <div className="row">
                 <div>
                     <label>Cantidad Prestamo</label>
@@ -19,12 +27,15 @@ const Formulario = () => {
                         className="u-full-width"
                         type="number"
                         placeholder="Ejemplo: 3000"
-                        onChange = { leerCantidad }
+                        onChange = { e => guardarCantidad(parseInt(e.target.value)) }
                     />
                 </div>
                 <div>
                     <label>Plazo para Pagar</label>
-                    <select className="u-full-width">
+                    <select
+                        className="u-full-width"
+                        onChange = { e => guardarPlazo(parseInt(e.target.value))}
+                    >
                         <option value="">Seleccionar</option>
                         <option value="3">3 meses</option>
                         <option value="6">6 meses</option>
@@ -41,6 +52,8 @@ const Formulario = () => {
               </div>
             </div>
         </form>
+        {error ? <p className='error'>Todos los campos son obligatorios</p> : null}
+    </Fragment>
     );
 }
 
