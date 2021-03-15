@@ -26,6 +26,5 @@ export function calcularTotal(cantidad, plazo){
             break;
     }
     let totalPlazo = cantidad * porcentajePlazo
-    const total = cantidad + (totalPlazo + totalCantidad)
-    console.log(total)
+    return cantidad + (totalPlazo + totalCantidad)
 }
